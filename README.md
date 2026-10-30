@@ -1,3 +1,5 @@
+![Banner](banner.png)
+
 # dm-data-null-injector
 Replaces values within a dataset with null values (None in Python, NULL in SQL, etc.) based on a specified probability or pattern matching. This helps obscure actual data while maintaining data structure and statistical properties. - Focused on Tools designed to generate or mask sensitive data with realistic-looking but meaningless values
 
