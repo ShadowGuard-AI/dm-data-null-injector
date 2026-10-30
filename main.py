@@ -3,6 +3,7 @@ import logging
 import random
 import pandas as pd
 import os
+import sys
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -53,6 +54,10 @@ def inject_nulls(data: pd.DataFrame, probability: float, pattern: str = None, co
                 continue
 
             for index, value in data[col].items():
+                # With a pattern set, only strings can match: numbers are
+                # left alone rather than coerced, so a pattern run never
+                # nulls a numeric column by accident. Note str.match is
+                # anchored at the start of the value, not a search.
                 if pattern is None or (isinstance(value, str) and bool(pd.Series(value).str.match(pattern)[0])):
                     if random.random() < probability:
                         data.at[index, col] = None  # Replace with None (null in pandas)
@@ -100,12 +105,16 @@ def main():
 
     except FileNotFoundError as e:
         logging.error(f"File error: {e}")
+        sys.exit(1)
     except ValueError as e:
         logging.error(f"Value error: {e}")
+        sys.exit(1)
     except TypeError as e:
         logging.error(f"Type error: {e}")
+        sys.exit(1)
     except Exception as e:
         logging.error(f"An unexpected error occurred: {e}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
