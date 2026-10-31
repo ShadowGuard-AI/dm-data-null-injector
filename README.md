@@ -15,5 +15,9 @@ Replaces values within a dataset with null values (None in Python, NULL in SQL, 
 - `--pattern`: Regular expression pattern to match values to be replaced with null.  If not specified, all values are considered.
 - `--columns`: Comma-separated list of column names to apply the null injection to. If not specified, all columns are considered.
 
+## Output path
+
+The output file must not be the input file. If the resolved output path equals the resolved input path, the run refuses at exit 1 before any write, including when the same file is named through a ./ alias or a symlink.
+
 ## License
 Copyright (c) ShadowStrikeHQ

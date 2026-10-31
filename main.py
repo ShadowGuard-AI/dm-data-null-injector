@@ -4,6 +4,7 @@ import random
 import pandas as pd
 import os
 import sys
+from pathlib import Path
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -81,6 +82,10 @@ def main():
         
         if not args.input_file.lower().endswith('.csv'):
              raise ValueError("Input file must be a CSV file.")
+
+        if Path(args.input_file).resolve() == Path(args.output_file).resolve():
+            logging.error("Output file is the same file as the input file. Refusing to overwrite the input in place.")
+            sys.exit(1)
 
         # Load data
         try:
