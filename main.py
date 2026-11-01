@@ -59,6 +59,12 @@ def inject_nulls(data: pd.DataFrame, probability: float, pattern: str = None, co
                 # left alone rather than coerced, so a pattern run never
                 # nulls a numeric column by accident. Note str.match is
                 # anchored at the start of the value, not a search.
+                # The pattern test builds a one row Series for every
+                # single value to borrow its str.match, so a large file
+                # pays a Series construction per cell. The draws below
+                # are also unseeded: this tool has no seed argument, so
+                # which values vanish cannot be reproduced from a record
+                # of the run.
                 if pattern is None or (isinstance(value, str) and bool(pd.Series(value).str.match(pattern)[0])):
                     if random.random() < probability:
                         data.at[index, col] = None  # Replace with None (null in pandas)
@@ -98,6 +104,11 @@ def main():
         columns = args.columns.split(',') if args.columns else None
 
         # Inject nulls
+        # One None in an integer column forces the whole column to a
+        # float or object dtype in the frame, so the written CSV shows
+        # the untouched values of that column in a new form (1 as 1.0)
+        # beside the empty fields. The injection changes the column's
+        # written type, not only the cells it picked.
         masked_data = inject_nulls(data.copy(), args.probability, args.pattern, columns)
 
         # Save masked data
