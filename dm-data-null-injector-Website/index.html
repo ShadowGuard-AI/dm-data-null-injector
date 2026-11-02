@@ -3,164 +3,136 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dm Data Null Injector: what it is, how it runs, where it stops</title>
-<meta name="description" content="Dm Data Null Injector is one of my projects. The README in the repo is short, so this page sticks to what the files themselves show.">
+<title>dm-data-null-injector: The Viking Thing Assembly Field</title>
 <style>
-:root {
-  --bg: #0a120e; --panel: #101c16; --ink: #e6f0e2;
-  --mut: #15251d;
-  --acc: #a8e05c; --acc2: #f0be54;
-  --line: #101c16;
-}
-* { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--ink);
-  font-family: 'Book Antiqua', Georgia, serif; line-height: 1.55; }
-code, pre, .mono { font-family: 'Andale Mono', monospace; }
-a { color: var(--acc2); }
-.hero { padding: 3rem 6vw 1rem; }
-.hero img.banner { width: 100%; height: auto; border: 1px solid var(--line);
-  border-radius: 10px; }
-.logo { width: 92px; height: 92px; border-radius: 18px;
-  border: 1px solid var(--line); }
-h1 { font-size: 2.4rem; margin: 0.4em 0 0.1em; }
-h2 { border-bottom: 2px solid var(--acc); padding-bottom: 0.2em;
-  margin-top: 2em; }
-.lede { font-size: 1.15rem; max-width: 62ch; }
-main { padding: 0 6vw 3rem; max-width: 1180px; margin: 0 auto; }
-.grid { display: grid; gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
-.card { background: var(--panel); border: 1px solid var(--line);
-  border-radius: 12px; padding: 1rem 1.2rem; }
-.card.pop { animation: rise 0.7s ease both; }
-@keyframes rise { from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: none; } }
-pre.code { background: #101014; color: #e8e6df; padding: 1rem 1.2rem;
-  border-radius: 12px; overflow-x: auto; font-size: 0.86rem;
-  border-left: 5px solid var(--acc); }
-table { border-collapse: collapse; width: 100%; }
-td, th { border-bottom: 1px solid var(--line); padding: 0.45rem 0.6rem;
-  text-align: left; }
-.shots { display: grid; gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-.shots img { width: 100%; height: auto; border: 1px solid var(--line);
-  border-radius: 10px; background: #f4f1e8; }
-footer { padding: 2rem 6vw; border-top: 1px solid var(--line);
-  color: var(--mut); }
-.rail { display: flex; gap: 1.2rem; align-items: flex-start; }
-.rail nav { position: sticky; top: 1rem; min-width: 180px; }
-@media (max-width: 760px) { .rail { flex-direction: column; }
-  .rail nav { position: static; } }
-@media (prefers-reduced-motion: reduce) {
-  .card.pop { animation: none; } * { scroll-behavior: auto; } }
+@font-face { font-family: "Cal Sans"; src: url("fonts/CalSans-Regular.ttf") format("truetype"); }
+@font-face { font-family: "Barlow"; src: url("fonts/Barlow-Regular.ttf") format("truetype"); }
+@font-face { font-family: "Barlow"; src: url("fonts/Barlow-Bold.ttf") format("truetype"); font-weight: bold; }
+body { margin: 0; background: #fbf7ea; color: #2b2620; font-family: "Barlow", sans-serif; line-height: 1.55; }
+header, main, footer { max-width: 980px; margin: 0 auto; padding: 24px 20px; }
+h1, h2, h3 { font-family: "Cal Sans", sans-serif; color: #1a2c66; line-height: 1.15; }
+h1 { font-size: 2.3rem; }
+img.wide { width: 100%; height: auto; display: block; }
+.panel { background: #e8d5a8; border: 2px solid #3a322b; border-left: 8px solid #1a1512; padding: 18px 20px; margin: 22px 0; }
+.panel.guard { border-left-color: #d4a017; }
+.marker { color: #a87f0a; font-weight: bold; }
+a { color: #1a2c66; }
+a:hover, a:active { color: #d4a017; }
+a::before { content: ""; display: inline-block; width: 14px; height: 5px; background: #1a1512; margin-right: 7px; transform: skewX(-24deg); }
+a:hover::before { background: #d4a017; }
+code, pre { font-family: monospace; }
+pre { background: #f6eccd; border: 2px solid #3a322b; padding: 16px; overflow-x: auto; white-space: pre-wrap; }
+.staffbtn { font-family: "Cal Sans", sans-serif; background: #8a7a5c; color: #1a1512; border: 2px solid #d4a017; border-radius: 14px 14px 4px 4px; padding: 10px 22px; cursor: pointer; }
+.staffbtn:hover { box-shadow: inset 0 -12px 16px rgba(212,160,23,0.55); }
+.staffbtn:active { transform: translateY(2px); }
+.staffbtn:focus { outline: 2px solid #1a1512; outline-offset: 3px; }
+label { display: block; font-weight: bold; margin-top: 12px; }
+input[type="text"] { width: 100%; padding: 8px; border: 2px solid #3a322b; background: #fbf7ea; box-sizing: border-box; }
+.tablet { background: #f6eccd; border: 2px solid #d4a017; border-left: 8px solid #1a1512; padding: 10px 14px; margin: 12px 0; }
 </style>
 </head>
-<body class="layout-poster">
-<!-- This page exists for dm-data-null-injector alone: the layout (poster),
-     the colors, and the type were picked for this project, not
-     shared with the other project pages. The code block below is
-     copied from the file it names, line for line. If it looks
-     plain, that is because the project is plain, and I would
-     rather the page match the project than dress it up. The one
-     thing I will not do here is oversell: what this project does
-     not do is stated on the page, not hidden from it. -->
-<header class="hero">
-  <img class="logo" src="assets/logo.png" alt="Dm Data Null Injector logo">
-  <img class="banner" src="assets/banner.png" alt="">
-  <h1>Dm Data Null Injector</h1>
-  <p class="mono"><a href="https://github.com/ShadowGuard-AI/dm-data-null-injector">github.com/ShadowGuard-AI/dm-data-null-injector</a></p>
+<body>
+<header>
+<img class="wide" src="intro-banner.png" alt="A lawspeaker staff on an empty assembly plain, bench and wax tablets behind it">
+<h1>dm-data-null-injector: The Viking Thing Assembly Field</h1>
+<p>A walk around the assembly ring, station by station, starting at the staff and ending at the bench. Each station below states one part of the record and states its gaps as gaps.</p>
+<img class="wide" src="banner.png" alt="The assembly plain with the repo name carved along the stone bench">
+<nav><p><a href="#record">Read the full live record at the foot of this page</a></p></nav>
 </header>
-
 <main>
-  <section class="rail">
-    <nav aria-label="on this page">
-      <p class="mono"><a href="#run">Run it</a><br>
-      <a href="#files">The files</a><br>
-      <a href="#sheets">The sheets</a><br>
-      <a href="https://github.com/ShadowGuard-AI/dm-data-null-injector">The repo</a></p>
-    </nav>
-    <div>
-      <p class="lede">Dm Data Null Injector is one of my projects. The README in the repo is short, so this page sticks to what the files themselves show.</p>
-      <div class="grid">
-        <div class="card pop"><h3>What it is</h3>
-          <p>Dm Data Null Injector: 5 files, 141 counted
-          lines across Python 121, Markdown 19, Text 1. One job, done in the
-          open, in files you can read.</p></div>
-        <div class="card pop"><h3>The biggest piece</h3>
-          <p><code>main.py</code> carries the most
-          lines. If the project grows, that file is where the growth
-          lands first, for better or worse.</p></div>
-        <div class="card pop"><h3>The honest gap</h3>
-          <p>No test files yet. That is the honest gap, and the roadmap in the visuals folder says what the first one should cover.</p></div>
-      </div>
-      <section id="run">
-        <h2>Run it</h2>
-        <p>The repo README has the exact commands for this one. The
-        shape is the shape for most of my projects: clone it, read the
-        top file first so you know what will happen, then run it on
-        something you do not mind breaking.</p>
-        <p class="mono">$ git clone https://github.com/ShadowGuard-AI/dm-data-null-injector.git<br>$ cd dm-data-null-injector</p>
-      </section>
-      
-  <section aria-label="real code">
-    <h2>The code, as it sits in the repo</h2>
-    <p>From <code>main.py</code>, line 9 on. I did
-    not tidy it for the page. What you see is what the file has.</p>
-    <pre class="code"><code>logging.basicConfig(level=logging.INFO, format=&#x27;%(asctime)s - %(levelname)s - %(message)s&#x27;)
+<section class="panel" id="job">
+<h2><span class="marker">Station One.</span> The Job, Stated Plainly</h2>
+<p>Values in a dataset are replaced with nulls, None in Python or NULL in SQL, chosen by probability or by pattern, so actual data is hidden while structure and statistical properties remain.</p>
+<p>Replaces values within a dataset with null values (None in Python, NULL in SQL, etc.) based on a specified probability or pattern matching. This helps obscure actual data while maintaining data structure and statistical properties. - Focused on Tools designed to generate or mask sensitive data with realistic-looking but meaningless values</p>
+</section>
 
-def setup_argparse():
-    &quot;&quot;&quot;
-    Sets up the argument parser for the command-line interface.
-    &quot;&quot;&quot;
-    parser = argparse.ArgumentParser(description=&quot;Replaces values in a dataset with null values based on probability or pattern matching.&quot;)
-    parser.add_argument(&quot;input_file&quot;, help=&quot;Path to the input CSV file.&quot;)
-    parser.add_argument(&quot;output_file&quot;, help=&quot;Path to the output CSV file.&quot;)
-    parser.add_argument(&quot;--probability&quot;, type=float, default=0.1,
-                        help=&quot;Probability (0.0 to 1.0) of replacing a value with null. Default is 0.1.&quot;)
-    parser.add_argument(&quot;--pattern&quot;, type=str, default=None,
-                        help=&quot;Regular expression pattern to match values to be replaced with null.  If not specified, all values are considered.&quot;)
-    parser.add_argument(&quot;--columns&quot;, type=str, default=None,
-                        help=&quot;Comma-separated list of column names to apply the null injection to. If not specified, all columns are considered.&quot;)
-    return parser.parse_args()
+<section class="panel" id="fetch">
+<h2><span class="marker">Station Two.</span> Fetching the Code, With One Open Repair</h2>
+<p>The published record carries this line:</p>
+<p><code>git clone https://github.com/ShadowStrikeHQ/dm-data-null-injector</code></p>
+<p>Correction, labelled as a correction: a visitor who follows that line literally reaches a predecessor organisation, not this one. The corrected direction is:</p>
+<p><code>git clone https://github.com/ShadowGuard-AI/dm-data-null-injector</code></p>
+<p>Nothing about the corrected line is original wording. The reason stands beside it in plain view: the published line names the older house.</p>
+</section>
 
-def inject_nulls(data: pd.DataFrame, probability: float, pattern: str = None, columns: list = None) -&gt; pd.DataFrame:
-    &quot;&quot;&quot;
-    Replaces values in a DataFrame with null values based on the specified probability and pattern.
+<section class="panel" id="invocation">
+<h2><span class="marker">Station Three.</span> The Invocation Shape, and Nothing More</h2>
+<p><code>./dm-data-null-injector [params]</code></p>
+<p>This station stops there. No example dataset, no example column name taken from real work, and no cell value of any kind is printed to fill the space.</p>
+</section>
 
-    Args:</code></pre>
-  </section>
-      <section id="files">
-        <h2>The files that matter</h2>
-        <table><tr><th>File</th><th>Lines</th></tr>
-        <tr><td><code>main.py</code></td><td>121</td></tr>
-        <tr><td><code>README.md</code></td><td>19</td></tr>
-        <tr><td><code>requirements.txt</code></td><td>1</td></tr>
-        <tr><td><code>banner.png</code></td><td>0</td></tr>
-        <tr><td><code>logo.png</code></td><td>0</td></tr>
-        </table>
-        <p>Names doing the work: <span class="mono">setup_argparse, inject_nulls, main</span>.</p>
-      </section>
-      <section id="sheets">
-        <h2>Drawn by hand</h2>
-        <p>I sketch my projects on notebook paper so I have to
-        understand them well enough to draw them. The full set,
-        with the counts and how they were counted, is the
-        <a href="https://github.com/ShadowGuard-AI/dm-data-null-injector/tree/main/dm-data-null-injector-Visuals">dm-data-null-injector-Visuals</a>
-        folder in the repo. Nothing is drawn over the binder holes.
-        That is a rule, not a style.</p>
-        <div class="shots">
-          <img src="assets/architecture.png" alt="Hand drawn architecture sheet for Dm Data Null Injector">
-          <img src="assets/flowchart.png" alt="Hand drawn flowchart sheet for Dm Data Null Injector">
-          <img src="assets/product-map.png" alt="Hand drawn product map sheet for Dm Data Null Injector">
-        </div>
-      </section>
-    </div>
-  </section>
+<section class="panel" id="controls">
+<h2><span class="marker">Station Four.</span> The Four Controls, in Record Order</h2>
+<ul>
+<li><code>-h</code>: Show help message and exit</li>
+<li><code>--probability</code>: No description provided. Absence, printed at full size: the README prints no description for this control, and no default or range for it is printed anywhere in the record.</li>
+<li><code>--pattern</code>: Regular expression pattern to match values to be replaced with null.  If not specified, all values are considered.</li>
+<li><code>--columns</code>: Comma-separated list of column names to apply the null injection to. If not specified, all columns are considered.</li>
+</ul>
+<p>Absence, printed at full size: no input file argument, no output file argument, and no seed control are named in the parameters block as published.</p>
+<form>
+<label for="pattern">Pattern to Match</label>
+<input type="text" id="pattern" name="pattern">
+<label for="columns">Columns to Apply To</label>
+<input type="text" id="columns" name="columns">
+<p><button class="staffbtn" type="button">Inject Nulls</button></p>
+</form>
+</section>
+
+<section class="panel guard" id="guard">
+<h2><span class="marker">Station Five.</span> The Output Is Never the Input</h2>
+<p>The output file must not be the input file. If the resolved output path equals the resolved input path, the run refuses at exit 1 before any write, including when the same file is named through a ./ alias or a symlink.</p>
+<p>The input is left untouched, which follows from refusal before any write.</p>
+</section>
+
+<section class="panel" id="licence">
+<h2><span class="marker">Station Six.</span> Two Licence Facts, Kept Apart</h2>
+<h3>First: the repository licence file</h3>
+<p>The repository holds a file called LICENSE with MIT terms. Its holder is reported by shape only: years spanning a range up front, a given name next, a family name after that, a shortened form in round brackets carrying one initial, then a handle also in round brackets. The holder line itself is not transcribed here.</p>
+<h3>Second: a site level note on the README closing line</h3>
+<p>The README closes, in its published form, with a line naming the predecessor organisation:</p>
+<p>Copyright (c) ShadowStrikeHQ</p>
+<p>These two facts are never merged into a single credit line.</p>
+</section>
+
+<section class="panel" id="count">
+<h2><span class="marker">Station Seven.</span> The Count Aloud at the Gate</h2>
+<p>This station belongs to the site alone. Before a visitor leaves the ring, the bench is counted aloud, item by item, and the count is the whole of the station: one staff, one bench, one stack of blank wax tablets, one cloth of spilled tesserae, four controls, one guard, and three open gaps. The gaps are the missing probability description, the missing probability default or range, and the unnamed way a caller points the tool at a dataset. Nothing is added to make the count come out even.</p>
+<div class="tablet"><p>Wax tablet: a finished run is the only card here that bears a small staff mark in its top corner. No run is reported on this page, so no card here bears that mark.</p></div>
+<img class="wide" src="scene.svg" alt="Animated assembly field scene in three bands">
+</section>
+
+<section id="record">
+<h2>The Full Live Record</h2>
+<p>The live README, housed verbatim below.</p>
+<pre>![Banner](banner.png)
+
+# dm-data-null-injector
+Replaces values within a dataset with null values (None in Python, NULL in SQL, etc.) based on a specified probability or pattern matching. This helps obscure actual data while maintaining data structure and statistical properties. - Focused on Tools designed to generate or mask sensitive data with realistic-looking but meaningless values
+
+## Install
+`git clone https://github.com/ShadowStrikeHQ/dm-data-null-injector`
+
+## Usage
+`./dm-data-null-injector [params]`
+
+## Parameters
+- `-h`: Show help message and exit
+- `--probability`: No description provided
+- `--pattern`: Regular expression pattern to match values to be replaced with null.  If not specified, all values are considered.
+- `--columns`: Comma-separated list of column names to apply the null injection to. If not specified, all columns are considered.
+
+## Output path
+
+The output file must not be the input file. If the resolved output path equals the resolved input path, the run refuses at exit 1 before any write, including when the same file is named through a ./ alias or a symlink.
+
+## License
+Copyright (c) ShadowStrikeHQ</pre>
+</section>
 </main>
 <footer>
-  <p>Dm Data Null Injector is one of my projects. This page was written
-  from the repo itself on 2026-10-30: the counts are the
-  repo's counts, the code is the repo's code, and the gaps are the
-  repo's gaps.</p>
+<p><img src="logo.png" alt="Lawspeaker staff logo" width="72"></p>
+<p>Fonts on this page: Cal Sans and Barlow, both under the SIL Open Font License 1.1, with licence texts shipped beside the font files.</p>
 </footer>
 </body>
 </html>
