@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-label="The Viking Thing Assembly Field in three bands">
+  <rect x="0" y="0" width="1200" height="150" fill="#26418f"/>
+  <rect x="0" y="60" width="1200" height="90" fill="#eec448" opacity="0.45"/>
+  <polygon points="0,150 220,116 480,142 760,110 1020,144 1200,124 1200,170 0,170" fill="#5c604e"/>
+  <!-- Far band: ground fixed, obelisk shadows lengthen slowly -->
+  <g>
+    <polygon points="120,168 168,168 330,300 210,300" fill="#1a1512" opacity="0.22">
+      <animate attributeName="points" dur="14s" repeatCount="indefinite"
+        values="120,168 168,168 330,300 210,300; 120,168 168,168 430,300 250,300; 120,168 168,168 330,300 210,300"/>
+    </polygon>
+    <polygon points="820,168 874,168 1030,300 900,300" fill="#1a1512" opacity="0.18">
+      <animate attributeName="points" dur="14s" repeatCount="indefinite"
+        values="820,168 874,168 1030,300 900,300; 820,168 874,168 1120,300 950,300; 820,168 874,168 1030,300 900,300"/>
+    </polygon>
+  </g>
+  <rect x="0" y="168" width="1200" height="252" fill="#e8d5a8"/>
+  <!-- Middle band: bench group stays in place -->
+  <g>
+    <rect x="620" y="212" width="430" height="26" fill="#c4b28a" stroke="#1a1512" stroke-width="2"/>
+    <rect x="620" y="238" width="430" height="44" fill="#b4a078" stroke="#1a1512" stroke-width="2"/>
+    <rect x="646" y="282" width="34" height="46" fill="#96825e" stroke="#1a1512" stroke-width="2"/>
+    <rect x="990" y="282" width="34" height="46" fill="#96825e" stroke="#1a1512" stroke-width="2"/>
+    <!-- a wax tablet is lifted, turned over whole, and set down again -->
+    <g>
+      <rect x="742" y="188" width="92" height="24" fill="#dec48a" stroke="#1a1512" stroke-width="2">
+        <animateTransform attributeName="transform" type="translate" dur="10s" repeatCount="indefinite"
+          values="0,0; 0,-16; 0,-16; 0,0; 0,0" keyTimes="0;0.2;0.45;0.65;1"/>
+        <animateTransform attributeName="transform" type="scale" additive="sum" dur="10s" repeatCount="indefinite"
+          values="1,1; 1,1; 1,-1; 1,1; 1,1" keyTimes="0;0.2;0.45;0.65;1"/>
+      </rect>
+    </g>
+    <rect x="856" y="196" width="92" height="16" fill="#dec48a" stroke="#1a1512" stroke-width="2"/>
+    <!-- tesserae nudged one at a time across the cloth by an unseen hand at the frame edge -->
+    <polygon points="630,328 860,328 884,364 646,364" fill="#f6eccd" stroke="#3a322b" stroke-width="1.5"/>
+    <g fill="#26418f"><rect x="660" y="338" width="12" height="12"><animate attributeName="x" dur="9s" repeatCount="indefinite" values="660;676;676" keyTimes="0;0.3;1"/></rect></g>
+    <g fill="#d4a017"><rect x="706" y="344" width="12" height="12"><animate attributeName="x" dur="9s" begin="3s" repeatCount="indefinite" values="706;690;690" keyTimes="0;0.3;1"/></rect></g>
+    <g fill="#b23e30"><rect x="760" y="336" width="12" height="12"><animate attributeName="x" dur="9s" begin="6s" repeatCount="indefinite" values="760;776;776" keyTimes="0;0.3;1"/></rect></g>
+    <circle cx="1192" cy="330" r="10" fill="#e8d5a8" stroke="#1a1512" stroke-width="1.5">
+      <animate attributeName="cx" dur="9s" repeatCount="indefinite" values="1192;868;1192" keyTimes="0;0.3;1"/>
+    </circle>
+  </g>
+  <!-- Near band: staff planted, grass bends and recovers, one loose tessera rolls and stops -->
+  <g>
+    <ellipse cx="300" cy="398" rx="58" ry="10" fill="#786440"/>
+    <polygon points="292,398 296,120 304,120 308,398" fill="#7a5834"/>
+    <polygon points="303,398 304,120 308,120 308,398" fill="#1a1512"/>
+    <rect x="293" y="138" width="14" height="24" fill="#26418f" stroke="#1a2c66" stroke-width="1.5"/>
+    <circle cx="300" cy="102" r="34" fill="#26418f" stroke="#1a2c66" stroke-width="3"/>
+    <circle cx="288" cy="92" r="9" fill="#96b0e8"/>
+    <g stroke="#d4a017" stroke-width="2">
+      <path d="M236,408 q6,-18 2,-30"><animate attributeName="d" dur="4s" repeatCount="indefinite" values="M236,408 q6,-18 2,-30; M236,408 q14,-16 12,-28; M236,408 q6,-18 2,-30"/></path>
+      <path d="M356,410 q6,-18 2,-30"><animate attributeName="d" dur="4s" begin="1s" repeatCount="indefinite" values="M356,410 q6,-18 2,-30; M356,410 q14,-16 12,-28; M356,410 q6,-18 2,-30"/></path>
+      <path d="M268,414 q6,-14 2,-24"><animate attributeName="d" dur="4s" begin="2s" repeatCount="indefinite" values="M268,414 q6,-14 2,-24; M268,414 q12,-12 10,-22; M268,414 q6,-14 2,-24"/></path>
+    </g>
+    <rect x="352" y="388" width="13" height="13" fill="#d4a017" stroke="#1a1512" stroke-width="1">
+      <animateTransform attributeName="transform" type="translate" dur="7s" repeatCount="indefinite" values="0,0; 34,8; 34,8" keyTimes="0;0.35;1"/>
+      <animateTransform attributeName="transform" type="rotate" additive="sum" dur="7s" repeatCount="indefinite" values="0 358 394; 50 358 394; 50 358 394" keyTimes="0;0.35;1"/>
+    </rect>
+  </g>
+</svg>
