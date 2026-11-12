@@ -24,14 +24,14 @@ Replaces values within a dataset with null values (None in Python, NULL in SQL, 
 ![Abacus bead row](sep-light.svg)
 
 ## Install
-`git clone https://github.com/ShadowStrikeHQ/dm-data-null-injector`
+`git clone https://github.com/ShadowGuard-AI/dm-data-null-injector`
 
 A note stands beside this chapter in the website record: the line above names a predecessor house, and it is kept here exactly as published.
 
 ![Abacus bead row](sep-light.svg)
 
 ## Usage
-`./dm-data-null-injector [params]`
+`python3 main.py input_file output_file [options]`
 
 ![Abacus bead row](sep-light.svg)
 
@@ -50,7 +50,7 @@ The output file must not be the input file. If the resolved output path equals t
 ![Abacus bead row](sep-light.svg)
 
 ## License
-Copyright (c) ShadowStrikeHQ
+This project is released under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ![Abacus bead row](sep-heavy.svg)
 
